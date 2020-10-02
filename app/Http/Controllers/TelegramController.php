@@ -15,7 +15,7 @@ class TelegramController extends Controller
     public function register(PhpTelegramBotContract $telegram, Logger $logger)
     {
         try {
-            $hookUrl = config('APP_URL'). '/hook'; //TODO: url()
+            $hookUrl = config('app.url'). '/hook'; //TODO: url()
             $result  = $telegram->setWebhook($hookUrl);
 
             if ($result->isOk()) {
