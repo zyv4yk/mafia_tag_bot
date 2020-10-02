@@ -15,7 +15,7 @@ class TelegramController extends Controller
     public function register(PhpTelegramBotContract $telegram, Logger $logger)
     {
         try {
-            $hookUrl = 'https://9bfa61bb9f81.ngrok.io/hook';
+            $hookUrl = config('APP_URL'). '/hook'; //TODO: url()
             $result  = $telegram->setWebhook($hookUrl);
 
             if ($result->isOk()) {
@@ -34,7 +34,6 @@ class TelegramController extends Controller
     {
         try {
             $telegram->handle();
-            $logger->info($telegram->getCustomInput());
 
             if ($this->isCommandInMessage($telegram->getCustomInput())) {
                 ProcessMessage::dispatch($telegram->getCustomInput());
