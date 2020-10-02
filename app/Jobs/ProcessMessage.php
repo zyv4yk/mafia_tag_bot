@@ -41,7 +41,9 @@ class ProcessMessage implements ShouldQueue
     public function handle(PhpTelegramBotContract $telegram, Logger $log): void
     {
         $message = json_decode($this->message, true);
-        $message = $message['message'];
-        TagUser::saveNewTag($message['from']['id'], $message['chat']['id'], $message['from']['first_name']);
+        if(isset($message['message'])) {
+            $message = $message['message'];
+            TagUser::saveNewTag($message['from']['id'], $message['chat']['id'], $message['from']['first_name']);
+        }
     }
 }
