@@ -92,7 +92,7 @@ class TagAllCommand extends UserCommand
     protected function getUsers(array $tags): Generator
     {
         foreach ($tags as $userId => $tag) {
-            yield "[${tag['name']}](tg://user?id=${tag['id']}) ";
+            yield "[${tag['name']}](tg://user?id=${tag['user_id']}) ";
         }
     }
 }
