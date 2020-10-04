@@ -22,20 +22,20 @@ class TagUser extends Model
 
     public static function saveNewTag($userId, $chatId, $userName)
     {
-        $blackList = explode(',', config('phptelegrambot.tab_black_list'));
+        $blackList = explode(',', config('phptelegrambot.tag_black_list'));
 
         $blackList = $blackList ?: [];
 
-        if (!in_array($userId, $blackList, true) && !self::isUserSaved($userId, $chatId)) {
-            $model          = new self();
-            $model->user_id = $userId;
-            $model->chat_id = $chatId;
-            $model->name    = $userName;
-
-            return $model->save();
+        if (in_array($userId, $blackList, false) || self::isUserSaved($userId, $chatId)) {
+            return true;
         }
 
-        return true;
+        $model          = new self();
+        $model->user_id = $userId;
+        $model->chat_id = $chatId;
+        $model->name    = $userName;
+
+        return $model->save();
     }
 
     public static function deleteUser($userId, $chatId)

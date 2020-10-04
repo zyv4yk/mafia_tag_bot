@@ -41,7 +41,7 @@ return [
         'interval' => 1,
     ],
 
-    'tab_black_list' => env('PHP_TELEGRAM_TAG_BLACK_LIST', ''),
+    'tag_black_list' => env('PHP_TELEGRAM_TAG_BLACK_LIST', ''),
     'upload_path'   => '',
     'download_path' => '',
 ];
