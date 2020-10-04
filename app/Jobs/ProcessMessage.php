@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Log\Logger;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Longman\TelegramBot\Exception\TelegramException;
 use PhpTelegramBot\Laravel\PhpTelegramBotContract;
 
 class ProcessMessage implements ShouldQueue
@@ -36,14 +37,22 @@ class ProcessMessage implements ShouldQueue
      * @param PhpTelegramBotContract $telegram
      *
      * @return void
-     * @throws \Longman\TelegramBot\Exception\TelegramException
+     * @throws TelegramException
      */
-    public function handle(PhpTelegramBotContract $telegram, Logger $log): void
+    public function handle(PhpTelegramBotContract $telegram): void
     {
         $message = json_decode($this->message, true);
-        if(isset($message['message'])) {
-            $message = $message['message'];
-            TagUser::saveNewTag($message['from']['id'], $message['chat']['id'], $message['from']['first_name']);
+        if (isset($message['message'])) {
+            $message         = $message['message'];
+            $isNewMember     = isset($message['new_chat_participant'], $message['new_chat_member'], $message['new_chat_members']);
+            $isLeavingMember = isset($message['left_chat_participant'], $message['left_chat_member']);
+            if (!$isNewMember && !$isLeavingMember) {
+                TagUser::saveNewTag($message['from']['id'], $message['chat']['id'], $message['from']['first_name']);
+            }
+
+            if ($isLeavingMember) {
+                TagUser::deleteUser($message['from']['id'], $message['chat']['id']);
+            }
         }
     }
 }

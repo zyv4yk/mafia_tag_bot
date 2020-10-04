@@ -44,7 +44,8 @@ class TagAllCommand extends UserCommand
     public function execute(): ServerResponse
     {
         $chatId = $this->getMessage()->getChat()->getId();
-        $tags   = TagUser::getAllByChatId($chatId);
+        $userId = $this->getMessage()->getFrom()->getId();
+        $tags   = TagUser::getAllByChatId($chatId, $userId);
         $count  = $tags->count();
 
         if ($count === 0) {

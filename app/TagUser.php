@@ -22,8 +22,11 @@ class TagUser extends Model
 
     public static function saveNewTag($userId, $chatId, $userName)
     {
+        $blackList = explode(',', config('phptelegrambot.tab_black_list'));
 
-        if(!self::isUserSaved($userId,$chatId)) {
+        $blackList = $blackList ?: [];
+
+        if (!in_array($userId, $blackList, true) && !self::isUserSaved($userId, $chatId)) {
             $model          = new self();
             $model->user_id = $userId;
             $model->chat_id = $chatId;
@@ -45,8 +48,8 @@ class TagUser extends Model
         return TagUser::where('user_id', '=', $userId)->where('chat_id', '=', $chatId)->first();
     }
 
-    public static function getAllByChatId($chatId)
+    public static function getAllByChatId($chatId, $userId)
     {
-        return TagUser::where('chat_id', '=', $chatId)->get();
+        return TagUser::where('chat_id', '=', $chatId)->where('user_id', '!=', $userId)->get();
     }
 }
