@@ -44,8 +44,9 @@ class ProcessMessage implements ShouldQueue
         $message = json_decode($this->message, true);
         if (isset($message['message'])) {
             $message         = $message['message'];
-            $isNewMember     = isset($message['new_chat_participant'], $message['new_chat_member'], $message['new_chat_members']);
-            $isLeavingMember = isset($message['left_chat_participant'], $message['left_chat_member']);
+            $isNewMember     = isset($message['new_chat_participant']) || isset($message['new_chat_member']) || isset($message['new_chat_members']);
+            $isLeavingMember = isset($message['left_chat_participant']) || isset($message['left_chat_member']);
+
             if (!$isNewMember && !$isLeavingMember) {
                 TagUser::saveNewTag($message['from']['id'], $message['chat']['id'], $message['from']['first_name']);
             }
