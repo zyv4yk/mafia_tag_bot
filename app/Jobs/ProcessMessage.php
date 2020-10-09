@@ -6,7 +6,6 @@ use App\TagUser;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Log\Logger;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Longman\TelegramBot\Exception\TelegramException;
@@ -39,7 +38,7 @@ class ProcessMessage implements ShouldQueue
      * @return void
      * @throws TelegramException
      */
-    public function handle(PhpTelegramBotContract $telegram): void
+    public function handle(): void
     {
         $message = json_decode($this->message, true);
         if (isset($message['message'])) {

@@ -48,6 +48,9 @@ class TagAllCommand extends UserCommand
         $tags   = TagUser::getAllByChatId($chatId, $userId);
         $count  = $tags->count();
 
+
+        $chat = $this->getMessage()->getChat();
+
         if ($count === 0) {
             return $this->replyToChat('No users to tag');
         }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\DB;
  * @property $user_id
  * @property $chat_id
  * @property $name
+ * @property $updated_at
+ * @property $created_at
  */
 class TagUser extends Model
 {
@@ -18,7 +21,7 @@ class TagUser extends Model
     protected $primaryKey = 'user_id';
 
     protected $fillable = ['user_id', 'chat_id', 'name'];
-    public $timestamps = false;
+    public $timestamps = true;
 
     public static function saveNewTag($userId, $chatId, $userName)
     {
@@ -26,7 +29,17 @@ class TagUser extends Model
 
         $blackList = $blackList ?: [];
 
-        if (in_array($userId, $blackList, false) || self::isUserSaved($userId, $chatId)) {
+        if (in_array($userId, $blackList, false)) {
+            return true;
+        }
+
+        if ($user = self::isUserSaved($userId, $chatId)) {
+            $now = Carbon::now();
+            if ($user->updated_at === null || $now->diffInDays($user->updated_at) > 1) {
+                $user->updateTimestamps();
+                $user->save();
+            }
+
             return true;
         }
 
