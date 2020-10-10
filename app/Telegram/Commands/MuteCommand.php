@@ -11,6 +11,8 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use App\TagUser;
+use Illuminate\Support\Facades\Log;
+use Longman\TelegramBot\Commands\AdminCommand;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
@@ -49,18 +51,36 @@ class MuteCommand extends UserCommand
      */
     public function execute()
     {
+        $sendUserId = $this->getMessage()->getFrom()->getId();
+        $sendInChat = $this->getMessage()->getChat()->getId();
+
+        $chatAdmins = Request::getChatAdministrators([
+            'chat_id' => $sendInChat
+        ]);
+
+        $chatAdmins = json_decode($chatAdmins, true);
+
+        $isAdmin = false;
+        foreach ($chatAdmins['result'] as $admin) {
+            if ($admin['user']['id'] === $sendUserId) {
+                $isAdmin = true;
+            }
+        }
+
         $replyTo = $this->getMessage()->getReplyToMessage();
 
-        $userId = $replyTo->getFrom()->getId();
-        $chatId = $replyTo->getChat()->getId();
-        $name = $replyTo->getFrom()->getFirstName();
-        $messageId = $replyTo->getMessageId();
+        if ($replyTo !== null && $isAdmin) {
+            $userId    = $replyTo->getFrom()->getId();
+            $chatId    = $replyTo->getChat()->getId();
+            $name      = $replyTo->getFrom()->getFirstName();
+            $messageId = $replyTo->getMessageId();
 
-        if (TagUser::deleteUser($userId, $chatId)) {
-            return $this->replyToChat(
-                "$name, ты удален из списка, так как играть с мутом запрещено правилами!",
-                ['parse_mode' => 'Markdown', 'reply_to_message_id' => $messageId]
-            );
+            if (TagUser::deleteUser($userId, $chatId)) {
+                return $this->replyToChat(
+                    "$name, ты удален из списка, так как играть с мутом запрещено правилами!",
+                    ['parse_mode' => 'Markdown', 'reply_to_message_id' => $messageId]
+                );
+            }
         }
 
         return Request::emptyResponse();

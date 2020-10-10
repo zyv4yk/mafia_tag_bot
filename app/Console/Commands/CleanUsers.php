@@ -58,10 +58,10 @@ class CleanUsers extends Command
 
         foreach ($deleted as $chat => $count) {
             try {
-                Request::sendMessage(array_merge([
+                Request::sendMessage([
                     'chat_id' => $chat,
                     'text'    => "Удалено из списка $count пользователей",
-                ]));
+                ]);
             } catch (TelegramException $e) {
                 Log::critical($e);
             }
