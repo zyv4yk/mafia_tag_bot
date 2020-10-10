@@ -11,10 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', 'Controller@index');
 
 Route::get('/register', 'TelegramController@register');
 Route::post('/hook', 'TelegramController@hook');
