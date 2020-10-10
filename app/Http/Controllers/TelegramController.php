@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Jobs\ProcessMessage;
 use Exception;
 use Illuminate\Log\Logger;
+use Illuminate\Support\Facades\Log;
 use Longman\TelegramBot\Exception\TelegramException;
 use PhpTelegramBot\Laravel\PhpTelegramBotContract;
 
@@ -35,7 +36,7 @@ class TelegramController extends Controller
         try {
             $telegram->handle();
 
-            //$logger->info($telegram->getCustomInput());
+            $logger->info($telegram->getCustomInput());
             if ($this->isCommandInMessage($telegram->getCustomInput())) {
                 ProcessMessage::dispatch($telegram->getCustomInput());
             }
