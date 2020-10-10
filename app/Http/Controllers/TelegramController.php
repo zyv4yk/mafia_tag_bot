@@ -36,7 +36,7 @@ class TelegramController extends Controller
         try {
             $telegram->handle();
 
-            $logger->info($telegram->getCustomInput());
+            //$logger->info($telegram->getCustomInput());
             if ($this->isCommandInMessage($telegram->getCustomInput())) {
                 ProcessMessage::dispatch($telegram->getCustomInput());
             }
