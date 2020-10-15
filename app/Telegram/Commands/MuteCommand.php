@@ -10,6 +10,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use App\Helper\Telegram;
 use App\TagUser;
 use Illuminate\Support\Facades\Log;
 use Longman\TelegramBot\Commands\AdminCommand;
@@ -54,18 +55,7 @@ class MuteCommand extends UserCommand
         $sendUserId = $this->getMessage()->getFrom()->getId();
         $sendInChat = $this->getMessage()->getChat()->getId();
 
-        $chatAdmins = Request::getChatAdministrators([
-            'chat_id' => $sendInChat
-        ]);
-
-        $chatAdmins = json_decode($chatAdmins, true);
-
-        $isAdmin = false;
-        foreach ($chatAdmins['result'] as $admin) {
-            if ($admin['user']['id'] === $sendUserId) {
-                $isAdmin = true;
-            }
-        }
+        $isAdmin = Telegram::isChatAdmin($sendInChat, $sendUserId);
 
         $replyTo = $this->getMessage()->getReplyToMessage();
 

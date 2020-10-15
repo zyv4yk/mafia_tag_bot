@@ -47,6 +47,7 @@ class TagUser extends Model
         $model->user_id = $userId;
         $model->chat_id = $chatId;
         $model->name    = $userName;
+        $model->updateTimestamps();
 
         return $model->save();
     }
