@@ -29,6 +29,8 @@ class KickCommand extends UserCommand
      */
     protected $name = 'kick';
 
+    protected $enabled = false;
+
     /**
      * @var string
      */
