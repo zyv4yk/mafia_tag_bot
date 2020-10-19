@@ -53,7 +53,7 @@ class ChatLeftMember extends Command
             $info = json_decode($info, true);
 
 
-            if ($info['ok'] !== true || $info['result']['status'] === 'left') {
+            if ($info['ok'] !== true || $info['result']['status'] === 'left' || $info['result']['status'] === 'kicked') {
                 TagUser::deleteUser($user->user_id, $user->chat_id);
             }
         }
