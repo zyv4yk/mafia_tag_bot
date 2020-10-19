@@ -27,17 +27,17 @@ class KickCommand extends UserCommand
     /**
      * @var string
      */
-    protected $name = 'Kick';
+    protected $name = 'kick';
 
     /**
      * @var string
      */
-    protected $description = 'mute command';
+    protected $description = 'kick command';
 
     /**
      * @var string
      */
-    protected $usage = '/mute';
+    protected $usage = '/kick';
 
     /**
      * @var string
