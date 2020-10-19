@@ -24,8 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->command('tags:clean')->daily()->runInBackground();
-         $schedule->command('tag:chat:member')->everyFiveMinutes()->runInBackground();
+         $schedule->command('clean:users')->daily()->runInBackground();
+         $schedule->command('chat:left:member')->everyMinute()->runInBackground();
     }
 
     /**

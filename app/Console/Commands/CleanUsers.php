@@ -17,7 +17,7 @@ class CleanUsers extends Command
      *
      * @var string
      */
-    protected $signature = 'tags:clean';
+    protected $signature = 'clean:users';
 
     /**
      * The console command description.

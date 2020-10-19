@@ -8,14 +8,14 @@ use Illuminate\Support\Facades\Log;
 use Longman\TelegramBot\Request;
 use PhpTelegramBot\Laravel\PhpTelegramBotContract;
 
-class ChatLevedMember extends Command
+class ChatLeftMember extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'tag:chat:member';
+    protected $signature = 'chat:left:member';
 
     /**
      * The console command description.
@@ -53,7 +53,7 @@ class ChatLevedMember extends Command
             $info = json_decode($info, true);
 
 
-            if ($info['result']['status'] === 'left') {
+            if ($info['ok'] !== true || $info['result']['status'] === 'left') {
                 TagUser::deleteUser($user->user_id, $user->chat_id);
             }
         }
