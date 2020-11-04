@@ -55,7 +55,18 @@ class MuteCommand extends UserCommand
         $sendUserId = $this->getMessage()->getFrom()->getId();
         $sendInChat = $this->getMessage()->getChat()->getId();
 
-        $isAdmin = Telegram::isChatAdmin($sendInChat, $sendUserId);
+        $chatAdmins = Request::getChatAdministrators([
+            'chat_id' => $sendInChat
+        ]);
+
+        $chatAdmins = json_decode($chatAdmins, true);
+
+        $isAdmin = false;
+        foreach ($chatAdmins['result'] as $admin) {
+            if ($admin['user']['id'] === $sendUserId) {
+                $isAdmin = true;
+            }
+        }
 
         $replyTo = $this->getMessage()->getReplyToMessage();
 
