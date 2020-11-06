@@ -73,6 +73,11 @@ class KickCommand extends UserCommand
                 'user_id' => $sendUserId,
             ]);
 
+            Request::unbanChatMember([
+                'chat_id' => $sendInChat,
+                'user_id' => $sendUserId,
+            ]);
+
             $this->replyToChat('Прівєт, пострижися :)');
         }
 
