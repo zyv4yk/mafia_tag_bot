@@ -11,9 +11,6 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use App\TagUser;
-use Illuminate\Support\Facades\Log;
-use Longman\TelegramBot\Commands\AdminCommand;
-use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
@@ -21,7 +18,7 @@ use Longman\TelegramBot\Request;
 /**
  * Start command
  */
-class MuteCommand extends UserCommand
+class MuteCommand extends AbstractCommand
 {
     /**
      * @var string
@@ -54,18 +51,7 @@ class MuteCommand extends UserCommand
         $sendUserId = $this->getMessage()->getFrom()->getId();
         $sendInChat = $this->getMessage()->getChat()->getId();
 
-        $chatAdmins = Request::getChatAdministrators([
-            'chat_id' => $sendInChat
-        ]);
-
-        $chatAdmins = json_decode($chatAdmins, true);
-
-        $isAdmin = false;
-        foreach ($chatAdmins['result'] as $admin) {
-            if ($admin['user']['id'] === $sendUserId) {
-                $isAdmin = true;
-            }
-        }
+        $isAdmin = $this->isAdmin($sendInChat, $sendUserId);
 
         $replyTo = $this->getMessage()->getReplyToMessage();
 

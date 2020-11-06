@@ -1,4 +1,5 @@
 <?php
+
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use App\TagUser;
@@ -47,9 +48,6 @@ class TagAllCommand extends UserCommand
         $userId = $this->getMessage()->getFrom()->getId();
         $tags   = TagUser::getAllByChatId($chatId, $userId);
         $count  = $tags->count();
-
-
-        $chat = $this->getMessage()->getChat();
 
         if ($count === 0) {
             return $this->replyToChat('No users to tag');
