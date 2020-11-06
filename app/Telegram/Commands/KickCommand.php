@@ -21,22 +21,22 @@ use Longman\TelegramBot\Request;
 /**
  * Start command
  */
-class MuteCommand extends UserCommand
+class KickCommand extends UserCommand
 {
     /**
      * @var string
      */
-    protected $name = 'mute';
+    protected $name = 'kick';
 
     /**
      * @var string
      */
-    protected $description = 'mute command';
+    protected $description = 'kick command';
 
     /**
      * @var string
      */
-    protected $usage = '/mute';
+    protected $usage = '/kick';
 
     /**
      * @var string
@@ -67,20 +67,13 @@ class MuteCommand extends UserCommand
             }
         }
 
-        $replyTo = $this->getMessage()->getReplyToMessage();
+        if (!$isAdmin) {
+            Request::kickChatMember([
+                'chat_id' => $sendInChat,
+                'user_id' => $sendUserId,
+            ]);
 
-        if ($replyTo !== null && $isAdmin) {
-            $userId    = $replyTo->getFrom()->getId();
-            $chatId    = $replyTo->getChat()->getId();
-            $name      = $replyTo->getFrom()->getFirstName();
-            $messageId = $replyTo->getMessageId();
-
-            if (TagUser::deleteUser($userId, $chatId)) {
-                return $this->replyToChat(
-                    "$name, ты удален из списка, так как играть с мутом запрещено правилами!",
-                    ['parse_mode' => 'Markdown', 'reply_to_message_id' => $messageId]
-                );
-            }
+            $this->replyToChat('Прівєт, пострижися :)');
         }
 
         return Request::emptyResponse();

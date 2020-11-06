@@ -45,7 +45,7 @@ class CheckCommand extends UserCommand
 
 
         return $this->replyToChat(
-            "Че надо? Я вроде жив!",
+            "Че надо?",
             ['reply_to_message_id' => $messageId]
         );
     }
