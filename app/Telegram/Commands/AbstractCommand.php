@@ -10,18 +10,13 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\TagUser;
-use Illuminate\Support\Facades\Log;
-use Longman\TelegramBot\Commands\AdminCommand;
 use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Entities\ServerResponse;
-use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 
 /**
  * Start command
  */
-abstract class AbstractCommand extends UserCommand
+class AbstractCommand extends UserCommand
 {
     protected function isAdmin($chatId, $sendUserId)
     {
@@ -39,5 +34,10 @@ abstract class AbstractCommand extends UserCommand
         }
 
         return $isAdmin;
+    }
+
+    public function execute()
+    {
+
     }
 }
